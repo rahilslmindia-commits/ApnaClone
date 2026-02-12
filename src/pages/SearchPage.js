@@ -9,19 +9,22 @@ export default function SearchPage() {
   const type = (params.get('type') || '').trim().toLowerCase();
   const exp = (params.get('exp') || '').trim().toLowerCase();
   const shift = (params.get('shift') || '').trim().toLowerCase();
-  const hasQuery = !!(role || city || type || exp || shift);
+  const mode = (params.get('mode') || '').trim().toLowerCase();
+  const limit = parseInt(params.get('limit') || '', 10);
+  const hasQuery = !!(role || city || type || exp || shift || mode);
 
   const filtered = (() => {
     if (city && !role && !type && !exp && !shift) {
       return jobs.filter((j) => j.location.toLowerCase().includes(city));
     }
-    return jobs.filter((j) => {
+    const list = jobs.filter((j) => {
       const matchRole =
         !role ||
         j.title.toLowerCase().includes(role) ||
         j.company.toLowerCase().includes(role) ||
         j.category.toLowerCase().includes(role);
-      const matchCity = !city || j.location.toLowerCase().includes(city);
+      const ignoreCity = !!mode || !!type;
+      const matchCity = ignoreCity ? true : (!city || j.location.toLowerCase().includes(city));
       const matchType = !type || j.type.toLowerCase() === type;
       const matchExp =
         !exp ||
@@ -29,9 +32,33 @@ export default function SearchPage() {
       const matchShift =
         !shift ||
         (j.shift || '').toLowerCase().includes(shift);
-      return matchRole && matchCity && matchType && matchExp && matchShift;
+      let matchMode = true;
+      if (mode === 'wfh') {
+        const wfhCats = ['it', 'data entry', 'telecaller', 'back office'];
+        const hasRemoteWord =
+          (j.title || '').toLowerCase().includes('remote') ||
+          (j.description || '').toLowerCase().includes('remote') ||
+          (j.shift || '').toLowerCase().includes('remote') ||
+          (j.title || '').toLowerCase().includes('wfh') ||
+          (j.description || '').toLowerCase().includes('wfh');
+        matchMode = hasRemoteWord || wfhCats.includes((j.category || '').toLowerCase());
+      } else if (mode === 'onsite') {
+        const onsiteCats = [
+          'delivery boy','sales','security guard','driver','cook','househelp','office boy','technician'
+        ];
+        matchMode = onsiteCats.includes((j.category || '').toLowerCase());
+      }
+      return matchRole && matchCity && matchType && matchExp && matchShift && matchMode;
     });
+    if (mode && Number.isFinite(limit) && limit > 0) {
+      return list.slice(0, limit);
+    }
+    if (mode && !Number.isFinite(limit)) {
+      return list.slice(0, 10);
+    }
+    return list;
   })();
+
 
   return (
     <div className="app-root">
@@ -44,9 +71,11 @@ export default function SearchPage() {
           {hasQuery && (
             <>
               <div className="results-meta">
-                {filtered.length} results
-                {role && ` • role: "${role}"`}
-                {city && ` • city: "${city}"`}
+                {filtered.length} Results
+                {role && ` • role: "${role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()}"`}
+                {city && ` • City: "${city.charAt(0).toUpperCase() + city.slice(1).toLowerCase()}"`}
+                {mode && ` • Mode: "${mode}"`}
+                {type && ` • Type: "${type}"`}
               </div>
               <div className="grid jobs">
                 {filtered.length === 0 && (
@@ -60,7 +89,9 @@ export default function SearchPage() {
                     </div>
                     <div className="job-tags">
                       <span className="tag">{j.salary}</span>
-                      <span className="tag">{j.type}</span>
+                      <span className="tag">
+                        {mode === 'wfh' ? 'WFH' : mode === 'onsite' ? 'Onsite' : j.type}
+                      </span>
                     </div>
                     <Link
                       className="btn btn-outline small"

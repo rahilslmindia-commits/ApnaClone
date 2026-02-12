@@ -1,11 +1,13 @@
 import { useMemo } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { jobs } from '../data/jobs';
 import '../App.css';
 
 export default function JobsPage() {
   const { category } = useParams();
+  const [searchParams] = useSearchParams();
   const decodedCategory = decodeURIComponent(category || '');
+  const view = (searchParams.get('view') || '').toLowerCase();
   const list = useMemo(
     () => jobs.filter((j) => j.category === decodedCategory),
     [decodedCategory]
@@ -15,7 +17,7 @@ export default function JobsPage() {
     <div className="app-root">
       <section className="featured">
         <div className="container">
-          {decodedCategory === 'Delivery Boy' && (
+          {decodedCategory === 'Delivery Boy' && view !== 'cards' && (
             <>
               <h2>Popular: Delivery Jobs</h2>
               <div className="stats-grid" style={{ marginTop: 12 }}>

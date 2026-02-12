@@ -6,22 +6,22 @@ export default function AdvicePage() {
     {
       slug: 'resume-tips',
       title: 'Resume Tips',
-      summary: 'ATS-friendly resume banayein: clear sections, keywords, measurable results.',
+      summary: 'Create an ATS-friendly resume: clear sections, keywords, measurable results.',
     },
     {
       slug: 'interview-prep',
       title: 'Interview Prep',
-      summary: 'Common questions, STAR method, company research aur mock interviews.',
+      summary: 'Common questions, STAR method, company research and mock interviews.',
     },
     {
       slug: 'communication-skills',
       title: 'Communication Skills',
-      summary: 'Professional tone, clarity aur listening skills improve karein.',
+      summary: 'Improve professional tone, clarity and listening skills.',
     },
     {
       slug: 'career-growth',
       title: 'Career Growth',
-      summary: 'Skill roadmap, certifications aur networking se growth accelerate.',
+      summary: 'Skill roadmap, certifications and networking accelerate growth.',
     },
     {
       slug: 'first-job',
@@ -40,7 +40,7 @@ export default function AdvicePage() {
       <section className="advice">
         <div className="container">
           <h1>Career Advice</h1>
-          <p className="sub">Better resume, interviews aur growth ke liye curated guidance.</p>
+          <p className="sub">Career guidance for better resume, interviews and growth.</p>
           <div className="advice-grid">
             {articles.map((a) => (
               <div key={a.slug} className="advice-card">

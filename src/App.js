@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, Routes, Route, useNavigate } from 'react-router-dom';
+import { Link, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { jobs } from './data/jobs';
 import JobsPage from './pages/JobsPage';
 import JobDetailPage from './pages/JobDetailPage';
 import SearchPage from './pages/SearchPage';
 import AdvicePage from './pages/AdvicePage';
 import AdviceDetailPage from './pages/AdviceDetailPage';
+import AboutPage from './pages/AboutPage';
 import { adviceArticles } from './data/advice';
 import LoginPage from './pages/LoginPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
@@ -16,6 +17,7 @@ import Logo from '../src/images/Media.png';
 function Home() {
   const [roleQuery, setRoleQuery] = useState('');
   const [cityQuery, setCityQuery] = useState('');
+  const [filterMode, setFilterMode] = useState('');
   const navigate = useNavigate();
   const categories = [
     'Delivery Boy',
@@ -106,14 +108,38 @@ function Home() {
               value={cityQuery}
               onChange={(e) => setCityQuery(e.target.value)}
             />
+            <select
+              value={filterMode}
+              onChange={(e) => setFilterMode(e.target.value)}
+              aria-label="Job mode"
+            >
+              <option value="">Select</option>
+              <option value="wfh">WFH</option>
+              <option value="onsite">Onsite</option>
+              <option value="full">Full-time</option>
+              <option value="part">Part-time</option>
+            </select>
             <button
               className="btn btn-primary"
-              disabled={!roleQuery.trim() && !cityQuery.trim()}
-              title={!roleQuery.trim() && !cityQuery.trim() ? 'Enter role or city to search' : undefined}
+              disabled={!roleQuery.trim() && !cityQuery.trim() && !filterMode}
+              title={!roleQuery.trim() && !cityQuery.trim() && !filterMode ? 'Enter role/city or choose a mode' : undefined}
               onClick={() => {
                 const params = new URLSearchParams();
                 if (roleQuery.trim()) params.set('role', roleQuery.trim());
                 if (cityQuery.trim()) params.set('city', cityQuery.trim());
+                if (filterMode === 'wfh') {
+                  params.set('mode', 'wfh');
+                  params.set('limit', '10');
+                } else if (filterMode === 'onsite') {
+                  params.set('mode', 'onsite');
+                  params.set('limit', '10');
+                } else if (filterMode === 'full') {
+                  params.set('type', 'Full-time');
+                  params.set('limit', '10');
+                } else if (filterMode === 'part') {
+                  params.set('type', 'Part-time');
+                  params.set('limit', '10');
+                }
                 if (params.toString()) {
                   navigate(`/search?${params.toString()}`);
                 }
@@ -133,7 +159,7 @@ function Home() {
               <div key={c} className="card">
                 <div className="card-title">{c}</div>
                 <div className="card-sub">
-                  <Link to={`/jobs/${encodeURIComponent(c)}`}>View Jobs</Link>
+                  <Link to={`/jobs/${encodeURIComponent(c)}${c === 'Delivery Boy' ? '?view=cards' : ''}`}>View Jobs</Link>
                 </div>
               </div>
             ))}
@@ -159,7 +185,7 @@ function Home() {
         </div>
       </section>
 
-      <section className="featured">
+      {/* <section className="featured">
         <div className="container">
           <h2>Featured Jobs</h2>
           <div className="results-meta">{homeResults.length} results</div>
@@ -182,7 +208,7 @@ function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section className="home-advice">
         <div className="container">
@@ -349,6 +375,7 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [jobsOpen, setJobsOpen] = useState(false);
   const jobsRef = useRef(null);
+  const { pathname } = useLocation();
   useEffect(() => {
     const onDocClick = (e) => {
       if (jobsOpen && jobsRef.current && !jobsRef.current.contains(e.target)) {
@@ -366,6 +393,9 @@ function App() {
       el.classList.remove('theme-dark');
     }
   }, [dark]);
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [pathname]);
   const 
   
   categories = [
@@ -434,12 +464,12 @@ function App() {
                 <div className="mega">
                   <div className="mega-col">
                     <div className="mega-title">Explore</div>
-                    <Link to="/search?type=Part-time" onClick={() => { setMenuOpen(false); setJobsOpen(false); }}>Part Time Jobs</Link>
-                    <Link to="/search?type=Full-time" onClick={() => { setMenuOpen(false); setJobsOpen(false); }}>Full Time Jobs</Link>
+                    <Link to="/search?type=Part-time&limit=10" onClick={() => { setMenuOpen(false); setJobsOpen(false); }}>Part Time Jobs</Link>
+                    <Link to="/search?type=Full-time&limit=10" onClick={() => { setMenuOpen(false); setJobsOpen(false); }}>Full Time Jobs</Link>
                     <Link to="/search?exp=fresher" onClick={() => { setMenuOpen(false); setJobsOpen(false); }}>Freshers Jobs</Link>
                     <Link to="/search?shift=night" onClick={() => { setMenuOpen(false); setJobsOpen(false); }}>Night Shift Jobs</Link>
-                    <Link to="/search?role=Delivery" onClick={() => { setMenuOpen(false); setJobsOpen(false); }}>Delivery/Driver Jobs</Link>
-                    <Link to="/search?role=Back Office" onClick={() => { setMenuOpen(false); setJobsOpen(false); }}>Back Office Jobs</Link>
+                    <Link to="/search?mode=onsite&limit=10" onClick={() => { setMenuOpen(false); setJobsOpen(false); }}>Delivery/Driver Jobs</Link>
+                    <Link to="/search?mode=wfh&limit=10" onClick={() => { setMenuOpen(false); setJobsOpen(false); }}>Back Office Jobs</Link>
                   </div>
                   <div className="mega-col">
                     <div className="mega-title">Jobs by City</div>
@@ -480,6 +510,7 @@ function App() {
         <Route path="/search" element={<SearchPage />} />
         <Route path="/advice" element={<AdvicePage />} />
         <Route path="/advice/:slug" element={<AdviceDetailPage />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/register" element={<RegisterPage />} />
@@ -502,24 +533,24 @@ function App() {
             </Link>
             <div className="copy">© {new Date().getFullYear()} LmIndia </div>
           </div>
-          <div className="footer-col">
+          {/* <div className="footer-col">
             <div className="footer-title">Job Categories</div>
             <div className="footer-links">
               {categories.slice(0, 8).map((c) => <a key={c} href="#jobs">{c}</a>)}
             </div>
-          </div>
-          <div className="footer-col">
+          </div> */}
+          {/* <div className="footer-col">
             <div className="footer-title">Cities</div>
             <div className="footer-links">
               {cities.slice(0, 8).map((c) => <a key={c} href="#cities">{c}</a>)}
             </div>
-          </div>
+          </div> */}
           <div className="footer-col">
             <div className="footer-title">Resources</div>
             <div className="footer-links">
               <Link to="/advice">Career Advice</Link>
               <a href="#contact">Contact</a>
-              <a href="#about">About</a>
+              <Link to="/about">About</Link>
               <a href="#privacy">Privacy</a>
               <a href="#terms">Terms</a>
             </div>
