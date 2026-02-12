@@ -84,10 +84,11 @@ function Home() {
     const matchCity = !c || j.location.toLowerCase().includes(c);
     return matchRole && matchCity;
   });
-  const homeResults =
-    roleQuery.trim() || cityQuery.trim()
-      ? dedupe(filteredFeatured).slice(0, 6)
-      : dedupe(jobs).slice(0, 6);
+  
+  // Featured jobs based on search or default
+  const homeResults = roleQuery.trim() || cityQuery.trim()
+    ? dedupe(filteredFeatured).slice(0, 6)
+    : dedupe(jobs).slice(0, 6);
 
   return (
     <>
@@ -151,6 +152,44 @@ function Home() {
         </div>
       </section>
 
+      {/* Featured Jobs Section - NOW USING homeResults VARIABLE */}
+      {homeResults.length > 0 && (
+        <section className="featured-jobs">
+          <div className="container">
+            <h2>{roleQuery.trim() || cityQuery.trim() ? 'Search Results' : 'Featured Jobs'}</h2>
+            <div className="jobs-grid">
+              {homeResults.map((job, index) => (
+                <div key={index} className="job-card">
+                  <h3 className="job-title">{job.title}</h3>
+                  <p className="job-company">{job.company}</p>
+                  <p className="job-location">
+                    <span>📍 {job.location}</span>
+                    {job.salary && <span>💰 {job.salary}</span>}
+                  </p>
+                  <div className="job-type">
+                    {job.type && <span className="badge">{job.type}</span>}
+                    {job.mode && <span className="badge">{job.mode}</span>}
+                  </div>
+                  <Link 
+                    to={`/jobs/${encodeURIComponent(job.title)}/${job.id || index}`} 
+                    className="btn btn-primary btn-small"
+                  >
+                    Apply Now
+                  </Link>
+                </div>
+              ))}
+            </div>
+            {(roleQuery.trim() || cityQuery.trim()) && (
+              <div className="view-all-link">
+                <Link to={`/search?role=${encodeURIComponent(roleQuery)}&city=${encodeURIComponent(cityQuery)}`} className="btn btn-outline">
+                  View All Results →
+                </Link>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
       <section id="jobs" className="categories">
         <div className="container">
           <h2>Popular Categories</h2>
@@ -184,31 +223,6 @@ function Home() {
           </div>
         </div>
       </section>
-
-      {/* <section className="featured">
-        <div className="container">
-          <h2>Featured Jobs</h2>
-          <div className="results-meta">{homeResults.length} results</div>
-          <div className="grid jobs">
-            {homeResults.length === 0 && (
-              <div className="no-results">No jobs found. Try changing filters.</div>
-            )}
-            {homeResults.map((j) => (
-              <div key={j.id} className="job-card">
-                <div className="job-title">{j.title}</div>
-                <div className="job-meta">{j.company} • {j.location}</div>
-                <div className="job-tags">
-                  <span className="tag">{j.salary}</span>
-                  <span className="tag">{j.type}</span>
-                </div>
-                <Link className="btn btn-outline small" to={`/jobs/${encodeURIComponent(j.category)}/${j.id}`}>
-                  Apply
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section> */}
 
       <section className="home-advice">
         <div className="container">
@@ -355,6 +369,7 @@ function Home() {
           </div>
         </div>
       </section>
+      
       <section id="employers" className="cta">
         <div className="container cta-content">
           <div>
@@ -376,6 +391,7 @@ function App() {
   const [jobsOpen, setJobsOpen] = useState(false);
   const jobsRef = useRef(null);
   const { pathname } = useLocation();
+  
   useEffect(() => {
     const onDocClick = (e) => {
       if (jobsOpen && jobsRef.current && !jobsRef.current.contains(e.target)) {
@@ -385,6 +401,7 @@ function App() {
     document.addEventListener('mousedown', onDocClick);
     return () => document.removeEventListener('mousedown', onDocClick);
   }, [jobsOpen]);
+  
   useEffect(() => {
     const el = document.documentElement;
     if (dark) {
@@ -393,45 +410,11 @@ function App() {
       el.classList.remove('theme-dark');
     }
   }, [dark]);
+  
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }, [pathname]);
-  const 
-  
-  categories = [
-    'Delivery Boy',
-    'Telecaller',
-    'Sales',
-    'Back Office',
-    'BPO',
-    'Receptionist',
-    'Accountant',
-    'Data Entry',
-    'Teacher',
-    'Marketing',
-    'Security Guard',
-    'Driver',
-    'Cook',
-    'Househelp',
-    'Office Boy',
-    'Technician',
-  ];
-  const cities = [
-    'Delhi NCR',
-    'Mumbai',
-    'Bengaluru',
-    'Pune',
-    'Hyderabad',
-    'Chennai',
-    'Kolkata',
-    'Jaipur',
-    'Ahmedabad',
-    'Surat',
-    'Indore',
-    'Lucknow',
-    'Nagpur',
-    'Bhopal',
-  ];
+
   return (
     <div className="app-root">
       <header className="header">
@@ -451,12 +434,10 @@ function App() {
           </Link>
           <button className="menu-toggle" onClick={() => setMenuOpen((v) => !v)}>Menu</button>
           <nav className={`nav ${menuOpen ? 'open' : ''}`}>
-            {/* <Link to="/" onClick={() => setMenuOpen(false)}>Search Jobs</Link> */}
             <div style={{ position: 'relative' }} ref={jobsRef}>
               <button
                 className={`jobs-toggle ${jobsOpen ? 'active' : ''}`}
                 onClick={() => setJobsOpen((v) => !v)}
-                style={{}}
               >
                 Jobs
               </button>
@@ -475,8 +456,8 @@ function App() {
                     <div className="mega-title">Jobs by City</div>
                     <div className="mega-grid">
                       {[
-                        'Delhi NCR','Mumbai','Bengaluru','Pune','Hyderabad','Chennai',
-                        'Kolkata','Jaipur','Ahmedabad','Surat','Indore','Lucknow'
+                        'Delhi NCR', 'Mumbai', 'Bengaluru', 'Pune', 'Hyderabad', 'Chennai',
+                        'Kolkata', 'Jaipur', 'Ahmedabad', 'Surat', 'Indore', 'Lucknow'
                       ].map((c) => (
                         <Link
                           key={c}
@@ -487,7 +468,6 @@ function App() {
                         </Link>
                       ))}
                     </div>
-                   
                   </div>
                 </div>
               )}
@@ -503,6 +483,7 @@ function App() {
           </nav>
         </div>
       </header>
+      
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/jobs/:category" element={<JobsPage />} />
@@ -515,6 +496,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>
+      
       <footer className="footer">
         <div className="container footer-content">
           <div className="footer-col">
@@ -531,20 +513,8 @@ function App() {
                 }}
               />
             </Link>
-            <div className="copy">© {new Date().getFullYear()} LmIndia </div>
+            <div className="copy">© {new Date().getFullYear()} LmIndia</div>
           </div>
-          {/* <div className="footer-col">
-            <div className="footer-title">Job Categories</div>
-            <div className="footer-links">
-              {categories.slice(0, 8).map((c) => <a key={c} href="#jobs">{c}</a>)}
-            </div>
-          </div> */}
-          {/* <div className="footer-col">
-            <div className="footer-title">Cities</div>
-            <div className="footer-links">
-              {cities.slice(0, 8).map((c) => <a key={c} href="#cities">{c}</a>)}
-            </div>
-          </div> */}
           <div className="footer-col">
             <div className="footer-title">Resources</div>
             <div className="footer-links">
@@ -557,6 +527,7 @@ function App() {
           </div>
         </div>
       </footer>
+      
       <div className="floating-contacts" aria-label="Quick contact">
         <a
           className="contact-btn whatsapp-btn"
@@ -567,7 +538,7 @@ function App() {
           title="WhatsApp"
         >
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M4.3 16.7A9.5 9.5 0 1 1 21 11c0 5.2-4.3 9.5-9.5 9.5-1.6 0-3.1-.4-4.5-1.1L3 21l1.3-4.3z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M4.3 16.7A9.5 9.5 0 1 1 21 11c0 5.2-4.3 9.5-9.5 9.5-1.6 0-3.1-.4-4.5-1.1L3 21l1.3-4.3z" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
             <path d="M8.6 9.1c.3-.6 1-.8 1.5-.4.3.3.6.9.5 1.5-.2.6-.6.8.1 1.7.7 1.1 1.6 1.7 2.4 2 .7.2 1.1.1 1.4-.2.2-.2.5-.5.8-.5.3 0 .8.2 1.1.5.4.3.5.7.4 1.2-.1.6-.7 1.4-1.5 1.7-.9.3-2 .2-3.2-.2-1.6-.6-3-1.7-4-2.9-1-1.2-1.4-2.4-1.5-3.3 0-.8.5-1.5 1.1-1.8.5-.2.9 0 1.1.4z" fill="#ffffff"></path>
           </svg>
         </a>
