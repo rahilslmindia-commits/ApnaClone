@@ -114,7 +114,7 @@ function Home() {
               onChange={(e) => setFilterMode(e.target.value)}
               aria-label="Job mode"
             >
-              <option value="">Select</option>
+              <option value="">Job Type</option>
               <option value="wfh">WFH</option>
               <option value="onsite">Onsite</option>
               <option value="full">Full-time</option>
@@ -153,7 +153,7 @@ function Home() {
       </section>
 
       {/* Featured Jobs Section - NOW USING homeResults VARIABLE */}
-      {homeResults.length > 0 && (
+      {/* {homeResults.length > 0 && (
         <section className="featured-jobs">
           <div className="container">
             <h2>{roleQuery.trim() || cityQuery.trim() ? 'Search Results' : 'Featured Jobs'}</h2>
@@ -188,9 +188,9 @@ function Home() {
             )}
           </div>
         </section>
-      )}
+      )} */}
 
-      <section id="jobs" className="categories">
+      < section id="jobs" className="categories">
         <div className="container">
           <h2>Popular Categories</h2>
           <div className="grid">

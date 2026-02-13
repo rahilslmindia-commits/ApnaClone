@@ -156,7 +156,8 @@
   border: none;
   background: transparent;
   border-radius: 8px;
-  font-weight: 500;
+  font-weight: 700;
+  font-size: large;
 }
 .jobs-toggle.active {
   color: var(--primary);
@@ -1117,6 +1118,8 @@
   border-radius: 16px;
   padding: 20px;
   box-shadow: 0 20px 50px rgba(15,23,42,0.2);
+  max-height: 80vh;
+  overflow-y: auto;
 }
 .apply-modal h3 {
   margin: 0 0 12px 0;
@@ -1127,6 +1130,16 @@
   flex-direction: column;
   gap: 12px;
 }
+.apply-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 640px) {
+  .apply-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
 .apply-form .form-row {
   display: flex;
   flex-direction: column;
@@ -1136,6 +1149,18 @@
 .apply-form input[type="email"],
 .apply-form input[type="tel"],
 .apply-form input[type="file"] {
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0 10px;
+  background: #fff;
+  color: var(--text);
+  outline: none;
+  font-size: 15px;
+  display: block;
+  margin-top: 6px;
+}
+.apply-form select {
   height: 44px;
   border: 1px solid var(--border);
   border-radius: 8px;
