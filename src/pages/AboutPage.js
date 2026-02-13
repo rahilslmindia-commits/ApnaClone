@@ -11,7 +11,9 @@ export default function AboutPage() {
             <h3>Our Placement Services</h3>
             <p>
               LmIndia's goal is to connect candidates with the right jobs and companies with the right talent.
-            
+              We provide verified openings for freshers to experienced candidates
+              across multiple cities and industries. Our platform offers direct HR chat, fast interview scheduling,
+              and a quick hiring experience.
             </p>
           </div>
           <div className="article-section">
