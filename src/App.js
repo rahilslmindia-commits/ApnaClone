@@ -54,8 +54,6 @@ function Home() {
     'Bhopal',
   ];
   const companies = [
-    'Zomato',
-    'Swiggy',
     'Flipkart',
     'Amazon',
     'Ola',
