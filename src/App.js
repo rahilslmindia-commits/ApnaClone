@@ -20,10 +20,7 @@ function Home() {
   const [filterMode, setFilterMode] = useState('');
   const navigate = useNavigate();
   const categories = [
-    'Delivery Boy',
-    'Telecaller',
-    'Sales',
-    'Back Office',
+    
     'BPO',
     'Receptionist',
     'Accountant',
