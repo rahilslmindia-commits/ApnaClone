@@ -7,6 +7,7 @@ import SearchPage from './pages/SearchPage';
 import AdvicePage from './pages/AdvicePage';
 import AdviceDetailPage from './pages/AdviceDetailPage';
 import AboutPage from './pages/AboutPage';
+import TermsPage from './pages/TermsPage';
 import { adviceArticles } from './data/advice';
 import LoginPage from './pages/LoginPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
@@ -82,7 +83,7 @@ function Home() {
     const matchCity = !c || j.location.toLowerCase().includes(c);
     return matchRole && matchCity;
   });
-  
+
   // Featured jobs based on search or default
   const homeResults = roleQuery.trim() || cityQuery.trim()
     ? dedupe(filteredFeatured).slice(0, 6)
@@ -367,7 +368,7 @@ function Home() {
           </div>
         </div>
       </section>
-      
+
       <section id="employers" className="cta">
         <div className="container cta-content">
           <div>
@@ -389,7 +390,7 @@ function App() {
   const [jobsOpen, setJobsOpen] = useState(false);
   const jobsRef = useRef(null);
   const { pathname } = useLocation();
-  
+
   useEffect(() => {
     const onDocClick = (e) => {
       if (jobsOpen && jobsRef.current && !jobsRef.current.contains(e.target)) {
@@ -399,7 +400,7 @@ function App() {
     document.addEventListener('mousedown', onDocClick);
     return () => document.removeEventListener('mousedown', onDocClick);
   }, [jobsOpen]);
-  
+
   useEffect(() => {
     const el = document.documentElement;
     if (dark) {
@@ -408,7 +409,7 @@ function App() {
       el.classList.remove('theme-dark');
     }
   }, [dark]);
-  
+
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }, [pathname]);
@@ -481,7 +482,7 @@ function App() {
           </nav>
         </div>
       </header>
-      
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/jobs/:category" element={<JobsPage />} />
@@ -490,11 +491,12 @@ function App() {
         <Route path="/advice" element={<AdvicePage />} />
         <Route path="/advice/:slug" element={<AdviceDetailPage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path='/terms' element={<TermsPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>
-      
+
       <footer className="footer">
         <div className="container footer-content">
           <div className="footer-col">
@@ -518,14 +520,30 @@ function App() {
             <div className="footer-links">
               <Link to="/advice">Career Advice</Link>
               <a href="#contact">Contact</a>
-              <Link to="/about">About</Link>
+              {/* <Link to="/about">About</Link> */}
               <a href="#privacy">Privacy</a>
               <a href="#terms">Terms</a>
             </div>
           </div>
+          {/* About */}
+          <div className="footer-col">
+            <div className="footer-title">About</div>
+            <p className="footer-about-text">
+             We connect job seekers with the right opportunities and help companies build strong teams.<br></br>
+              <Link to="/about">Read more...</Link>
+            </p>
+          </div>
+          {/* Terms & Conditions */}
+          <div className="footer-col">
+            <div className="footer-title">Terms & Conditions</div>
+            <p className="footer-about-text">
+            By using LmIndia’s website and services, you agree to our Terms & Conditions.<br></br>
+              <Link to="/terms">Read more...</Link>
+            </p>
+          </div>
         </div>
       </footer>
-      
+
       <div className="floating-contacts" aria-label="Quick contact">
         <a
           className="contact-btn whatsapp-btn"
