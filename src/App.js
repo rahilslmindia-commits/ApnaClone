@@ -90,65 +90,91 @@ function Home() {
     console.log(homeResults,'homeresults999');
   return (
     <>
-      <section className="hero">
-        <div className="container hero-content reveal-up">
-          <h1 className="headline-gradient">Search Jobs Online | Hire Candidates | Post a Job</h1>
-          <p className="sub"></p>
-          <div className="searchbar">
-            <input
-              type="text"
-              placeholder="Role or company"
-              value={roleQuery}
-              onChange={(e) => setRoleQuery(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="City"
-              value={cityQuery}
-              onChange={(e) => setCityQuery(e.target.value)}
-            />
-            <select
-              value={filterMode}
-              onChange={(e) => setFilterMode(e.target.value)}
-              aria-label="Job mode"
-            >
-              <option value="">Job Type</option>
-              <option value="wfh">WFH</option>
-              <option value="onsite">Onsite</option>
-              <option value="full">Full-time</option>
-              <option value="part">Part-time</option>
-            </select>
-            <button
-              className="btn btn-primary"
-              disabled={!roleQuery.trim() && !cityQuery.trim() && !filterMode}
-              title={!roleQuery.trim() && !cityQuery.trim() && !filterMode ? 'Enter role/city or choose a mode' : undefined}
-              onClick={() => {
-                const params = new URLSearchParams();
-                if (roleQuery.trim()) params.set('role', roleQuery.trim());
-                if (cityQuery.trim()) params.set('city', cityQuery.trim());
-                if (filterMode === 'wfh') {
-                  params.set('mode', 'wfh');
-                  params.set('limit', '10');
-                } else if (filterMode === 'onsite') {
-                  params.set('mode', 'onsite');
-                  params.set('limit', '10');
-                } else if (filterMode === 'full') {
-                  params.set('type', 'Full-time');
-                  params.set('limit', '10');
-                } else if (filterMode === 'part') {
-                  params.set('type', 'Part-time');
-                  params.set('limit', '10');
-                }
-                if (params.toString()) {
-                  navigate(`/search?${params.toString()}`);
-                }
-              }}
-            >
-              Search
-            </button>
-          </div>
-        </div>
-      </section>
+     <section className="hero">
+  <div className="container hero-content reveal-up">
+    <h1 className="headline-gradient">
+      Search Jobs Online | Hire Candidates | Post a Job
+    </h1>
+    <p className="sub"></p>
+
+    {/* 🔥 CHANGED: div → form */}
+    <form
+      className="searchbar"
+      onSubmit={(e) => {
+        e.preventDefault(); // prevent page reload
+
+        const params = new URLSearchParams();
+
+        if (roleQuery.trim()) params.set('role', roleQuery.trim());
+        if (cityQuery.trim()) params.set('city', cityQuery.trim());
+
+        if (filterMode === 'wfh') {
+          params.set('mode', 'wfh');
+          params.set('limit', '10');
+        } else if (filterMode === 'onsite') {
+          params.set('mode', 'onsite');
+          params.set('limit', '10');
+        } else if (filterMode === 'full') {
+          params.set('type', 'Full-time');
+          params.set('limit', '10');
+        } else if (filterMode === 'part') {
+          params.set('type', 'Part-time');
+          params.set('limit', '10');
+        }
+
+        if (params.toString()) {
+          navigate(`/search?${params.toString()}`);
+        }
+      }}
+    >
+      <input
+        type="text"
+        placeholder="Role or company"
+        value={roleQuery}
+        onChange={(e) => setRoleQuery(e.target.value)}
+      />
+
+      <input
+        type="text"
+        placeholder="City"
+        value={cityQuery}
+        onChange={(e) => setCityQuery(e.target.value)}
+      />
+
+      <select
+        value={filterMode}
+        onChange={(e) => setFilterMode(e.target.value)}
+        aria-label="Job mode"
+      >
+        <option value="">Job Type</option>
+        <option value="wfh">WFH</option>
+        <option value="onsite">Onsite</option>
+        <option value="full">Full-time</option>
+        <option value="part">Part-time</option>
+      </select>
+
+      {/* 🔥 CHANGED: added type="submit" and removed onClick */}
+      <button
+        type="submit"
+        className="btn btn-primary"
+        disabled={
+          !roleQuery.trim() &&
+          !cityQuery.trim() &&
+          !filterMode
+        }
+        title={
+          !roleQuery.trim() &&
+          !cityQuery.trim() &&
+          !filterMode
+            ? 'Enter role/city or choose a mode'
+            : undefined
+        }
+      >
+        Search
+      </button>
+    </form>
+  </div>
+</section>
 
       <section id="jobs" className="categories">
         <div className="container">
