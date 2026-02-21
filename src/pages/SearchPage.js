@@ -7,6 +7,7 @@ export default function SearchPage() {
   const role = (params.get('role') || '').trim().toLowerCase();
   const city = (params.get('city') || '').trim().toLowerCase();
   const type = (params.get('type') || '').trim().toLowerCase();
+  console.log(type, 'type0009990009999')
   const exp = (params.get('exp') || '').trim().toLowerCase();
   const shift = (params.get('shift') || '').trim().toLowerCase();
   const mode = (params.get('mode') || '').trim().toLowerCase();
@@ -44,7 +45,7 @@ export default function SearchPage() {
         matchMode = hasRemoteWord || wfhCats.includes((j.category || '').toLowerCase());
       } else if (mode === 'onsite') {
         const onsiteCats = [
-          'delivery boy','sales','security guard','driver','cook','househelp','office boy','technician'
+          'delivery boy', 'sales', 'security guard', 'driver', 'cook', 'househelp', 'office boy', 'technician'
         ];
         matchMode = onsiteCats.includes((j.category || '').toLowerCase());
       }
@@ -74,8 +75,14 @@ export default function SearchPage() {
                 {filtered.length} Results
                 {role && ` • role: "${role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()}"`}
                 {city && ` • City: "${city.charAt(0).toUpperCase() + city.slice(1).toLowerCase()}"`}
-                {mode && ` • Mode: "${mode}"`}
-                {type && ` • Type: "${type}"`}
+                {/* {mode && ` • Mode: "${mode}"`} */}
+                {/* {type && ` • Type: "${type} "`} */}
+                {mode && ` • Type: "${mode
+                  .toLowerCase()
+                  .replace(/\b\w/g, char => char.toUpperCase())}"`}
+                {type && ` • Type: "${type
+                  .toLowerCase()
+                  .replace(/\b\w/g, char => char.toUpperCase())}"`} 
               </div>
               <div className="grid jobs">
                 {filtered.length === 0 && (

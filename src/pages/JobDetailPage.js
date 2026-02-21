@@ -101,6 +101,24 @@ export default function JobDetailPage() {
             <div className="job-detail-actions">
               <button className="btn btn-primary" onClick={() => setShowApply(true)}>Apply Now</button>
               <Link className="btn btn-outline" to={`/jobs/${encodeURIComponent(decodedCategory)}`}>Back to {decodedCategory} Jobs</Link>
+              <button
+                className="btn btn-outline"
+                onClick={() => {
+                  const url = window.location.href;
+                  navigator.clipboard.writeText(url);
+                  alert('Link copied');
+                }}
+              >
+                Copy Link
+              </button>
+              <a
+                className="btn btn-outline"
+                href={`https://wa.me/?text=${encodeURIComponent(`Job: ${job.title} at ${job.company} (${job.location})\n${window.location.href}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Share on WhatsApp
+              </a>
             </div>
           </div>
         </div>

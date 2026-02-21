@@ -7,7 +7,6 @@ import SearchPage from './pages/SearchPage';
 import AdvicePage from './pages/AdvicePage';
 import AdviceDetailPage from './pages/AdviceDetailPage';
 import AboutPage from './pages/AboutPage';
-import TermsPage from './pages/TermsPage';
 import { adviceArticles } from './data/advice';
 import LoginPage from './pages/LoginPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
@@ -83,12 +82,12 @@ function Home() {
     const matchCity = !c || j.location.toLowerCase().includes(c);
     return matchRole && matchCity;
   });
-
+  
   // Featured jobs based on search or default
   const homeResults = roleQuery.trim() || cityQuery.trim()
     ? dedupe(filteredFeatured).slice(0, 6)
     : dedupe(jobs).slice(0, 6);
-
+    console.log(homeResults,'homeresults999');
   return (
     <>
       <section className="hero">
@@ -151,45 +150,7 @@ function Home() {
         </div>
       </section>
 
-      {/* Featured Jobs Section - NOW USING homeResults VARIABLE */}
-      {/* {homeResults.length > 0 && (
-        <section className="featured-jobs">
-          <div className="container">
-            <h2>{roleQuery.trim() || cityQuery.trim() ? 'Search Results' : 'Featured Jobs'}</h2>
-            <div className="jobs-grid">
-              {homeResults.map((job, index) => (
-                <div key={index} className="job-card">
-                  <h3 className="job-title">{job.title}</h3>
-                  <p className="job-company">{job.company}</p>
-                  <p className="job-location">
-                    <span>📍 {job.location}</span>
-                    {job.salary && <span>💰 {job.salary}</span>}
-                  </p>
-                  <div className="job-type">
-                    {job.type && <span className="badge">{job.type}</span>}
-                    {job.mode && <span className="badge">{job.mode}</span>}
-                  </div>
-                  <Link 
-                    to={`/jobs/${encodeURIComponent(job.title)}/${job.id || index}`} 
-                    className="btn btn-primary btn-small"
-                  >
-                    Apply Now
-                  </Link>
-                </div>
-              ))}
-            </div>
-            {(roleQuery.trim() || cityQuery.trim()) && (
-              <div className="view-all-link">
-                <Link to={`/search?role=${encodeURIComponent(roleQuery)}&city=${encodeURIComponent(cityQuery)}`} className="btn btn-outline">
-                  View All Results →
-                </Link>
-              </div>
-            )}
-          </div>
-        </section>
-      )} */}
-
-      < section id="jobs" className="categories">
+      <section id="jobs" className="categories">
         <div className="container">
           <h2>Popular Categories</h2>
           <div className="grid">
@@ -375,9 +336,9 @@ function Home() {
             <h2>Hire candidates faster</h2>
             <p className="sub">Reach millions of job seekers across India.</p>
           </div>
-          <a href="#post" className="btn btn-primary">
+          <Link to="/post-job" className="btn btn-primary">
             Post a Job
-          </a>
+          </Link>
         </div>
       </section>
     </>
@@ -491,7 +452,6 @@ function App() {
         <Route path="/advice" element={<AdvicePage />} />
         <Route path="/advice/:slug" element={<AdviceDetailPage />} />
         <Route path="/about" element={<AboutPage />} />
-        <Route path='/terms' element={<TermsPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/register" element={<RegisterPage />} />
@@ -520,7 +480,7 @@ function App() {
             <div className="footer-links">
               <Link to="/advice">Career Advice</Link>
               <a href="#contact">Contact</a>
-              {/* <Link to="/about">About</Link> */}
+              <Link to="/about">About</Link>
               <a href="#privacy">Privacy</a>
               <a href="#terms">Terms</a>
             </div>
