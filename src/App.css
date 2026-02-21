@@ -183,6 +183,25 @@
   border-radius: 8px;
   font-weight: 400;
   font-size: large;
+    position: relative;
+  transition: color 0.15s ease;
+}
+
+.jobs-toggle::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 2px;
+  width: 0;
+  background: linear-gradient(90deg, var(--accent1), var(--accent2));
+  transition: width 0.2s ease;
+}
+
+.jobs-toggle:hover::after,
+.jobs-toggle.active::after {
+  width: 100%;
+
 }
 .jobs-toggle.active {
   color: var(--primary);
