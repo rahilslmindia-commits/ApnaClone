@@ -7,6 +7,7 @@ import SearchPage from './pages/SearchPage';
 import AdvicePage from './pages/AdvicePage';
 import AdviceDetailPage from './pages/AdviceDetailPage';
 import AboutPage from './pages/AboutPage';
+import PostJob from './pages/PostJob';
 import { adviceArticles } from './data/advice';
 import LoginPage from './pages/LoginPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
@@ -478,6 +479,7 @@ function App() {
         <Route path="/advice" element={<AdvicePage />} />
         <Route path="/advice/:slug" element={<AdviceDetailPage />} />
         <Route path="/about" element={<AboutPage />} />
+         <Route path="/post-job" element={<PostJob />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/register" element={<RegisterPage />} />
@@ -508,24 +510,8 @@ function App() {
               <a href="#contact">Contact</a>
               <Link to="/about">About</Link>
               <a href="#privacy">Privacy</a>
-              <a href="#terms">Terms</a>
+              <a href="/terms">Terms</a>
             </div>
-          </div>
-          {/* About */}
-          <div className="footer-col">
-            <div className="footer-title">About</div>
-            <p className="footer-about-text">
-             We connect job seekers with the right opportunities and help companies build strong teams.<br></br>
-              <Link to="/about">Read more...</Link>
-            </p>
-          </div>
-          {/* Terms & Conditions */}
-          <div className="footer-col">
-            <div className="footer-title">Terms & Conditions</div>
-            <p className="footer-about-text">
-            By using LmIndia’s website and services, you agree to our Terms & Conditions.<br></br>
-              <Link to="/terms">Read more...</Link>
-            </p>
           </div>
         </div>
       </footer>

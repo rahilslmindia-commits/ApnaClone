@@ -9,7 +9,6 @@ export default function TermsPage() {
           <h1 className="article-title">Terms & Conditions</h1>
 
           <div className="article-section">
-            {/* <h3>1. Introduction</h3> */}
             <p>
               Welcome to LmIndia. By accessing and using our website
               and services, you agree to comply with these Terms & Conditions.
