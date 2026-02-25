@@ -7,13 +7,68 @@ import SearchPage from './pages/SearchPage';
 import AdvicePage from './pages/AdvicePage';
 import AdviceDetailPage from './pages/AdviceDetailPage';
 import AboutPage from './pages/AboutPage';
-import PostJob from './pages/PostJob';
+import TermsPage from './pages/TermsPage';
 import { adviceArticles } from './data/advice';
 import LoginPage from './pages/LoginPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import RegisterPage from './pages/RegisterPage';
 import './App.css';
 import Logo from '../src/images/Media.png';
+
+
+
+
+function StarRating({ rating, size = 18 }) {
+  const stars = [];
+
+  for (let i = 1; i <= 5; i++) {
+    if (rating >= i) {
+      stars.push(<FullStar key={i} size={size} />);
+    } else if (rating >= i - 0.5) {
+      stars.push(<HalfStar key={i} size={size} />);
+    } else {
+      stars.push(<EmptyStar key={i} size={size} />);
+    }
+  }
+
+  return <div style={{ display: "flex", gap: "4px" }}>{stars}</div>;
+}
+
+function FullStar({ size }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="#FFC107">
+      <path d="M12 2l2.9 6.9L22 9.3l-5 4.9L18.2 22 12 18.3 5.8 22 7 14.2l-5-4.9 7.1-.4z" />
+    </svg>
+  );
+}
+
+function HalfStar({ size }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24">
+      <defs>
+        <linearGradient id="halfGrad">
+          <stop offset="50%" stopColor="#FFC107" />
+          <stop offset="50%" stopColor="#E0E0E0" />
+        </linearGradient>
+      </defs>
+      <path
+        fill="url(#halfGrad)"
+        d="M12 2l2.9 6.9L22 9.3l-5 4.9L18.2 22 12 18.3 5.8 22 7 14.2l-5-4.9 7.1-.4z"
+      />
+    </svg>
+  );
+}
+
+function EmptyStar({ size }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="#E0E0E0">
+      <path d="M12 2l2.9 6.9L22 9.3l-5 4.9L18.2 22 12 18.3 5.8 22 7 14.2l-5-4.9 7.1-.4z" />
+    </svg>
+  );
+}
+
+
+
 
 function Home() {
   const [roleQuery, setRoleQuery] = useState('');
@@ -83,99 +138,99 @@ function Home() {
     const matchCity = !c || j.location.toLowerCase().includes(c);
     return matchRole && matchCity;
   });
-  
+
   // Featured jobs based on search or default
   const homeResults = roleQuery.trim() || cityQuery.trim()
     ? dedupe(filteredFeatured).slice(0, 6)
     : dedupe(jobs).slice(0, 6);
-    console.log(homeResults,'homeresults999');
+  console.log(homeResults, 'homeresults999');
   return (
     <>
-     <section className="hero">
-  <div className="container hero-content reveal-up">
-    <h1 className="headline-gradient">
-      Search Jobs Online | Hire Candidates | Post a Job
-    </h1>
-    <p className="sub"></p>
+      <section className="hero">
+        <div className="container hero-content reveal-up">
+          <h1 className="headline-gradient">
+            Search Jobs Online | Hire Candidates | Post a Job
+          </h1>
+          <p className="sub"></p>
 
-    {/* 🔥 CHANGED: div → form */}
-    <form
-      className="searchbar"
-      onSubmit={(e) => {
-        e.preventDefault(); // prevent page reload
+          {/* 🔥 CHANGED: div → form */}
+          <form
+            className="searchbar"
+            onSubmit={(e) => {
+              e.preventDefault(); // prevent page reload
 
-        const params = new URLSearchParams();
+              const params = new URLSearchParams();
 
-        if (roleQuery.trim()) params.set('role', roleQuery.trim());
-        if (cityQuery.trim()) params.set('city', cityQuery.trim());
+              if (roleQuery.trim()) params.set('role', roleQuery.trim());
+              if (cityQuery.trim()) params.set('city', cityQuery.trim());
 
-        if (filterMode === 'wfh') {
-          params.set('mode', 'wfh');
-          params.set('limit', '10');
-        } else if (filterMode === 'onsite') {
-          params.set('mode', 'onsite');
-          params.set('limit', '10');
-        } else if (filterMode === 'full') {
-          params.set('type', 'Full-time');
-          params.set('limit', '10');
-        } else if (filterMode === 'part') {
-          params.set('type', 'Part-time');
-          params.set('limit', '10');
-        }
+              if (filterMode === 'wfh') {
+                params.set('mode', 'wfh');
+                params.set('limit', '10');
+              } else if (filterMode === 'onsite') {
+                params.set('mode', 'onsite');
+                params.set('limit', '10');
+              } else if (filterMode === 'full') {
+                params.set('type', 'Full-time');
+                params.set('limit', '10');
+              } else if (filterMode === 'part') {
+                params.set('type', 'Part-time');
+                params.set('limit', '10');
+              }
 
-        if (params.toString()) {
-          navigate(`/search?${params.toString()}`);
-        }
-      }}
-    >
-      <input
-        type="text"
-        placeholder="Role or company"
-        value={roleQuery}
-        onChange={(e) => setRoleQuery(e.target.value)}
-      />
+              if (params.toString()) {
+                navigate(`/search?${params.toString()}`);
+              }
+            }}
+          >
+            <input
+              type="text"
+              placeholder="Role or company"
+              value={roleQuery}
+              onChange={(e) => setRoleQuery(e.target.value)}
+            />
 
-      <input
-        type="text"
-        placeholder="City"
-        value={cityQuery}
-        onChange={(e) => setCityQuery(e.target.value)}
-      />
+            <input
+              type="text"
+              placeholder="City"
+              value={cityQuery}
+              onChange={(e) => setCityQuery(e.target.value)}
+            />
 
-      <select
-        value={filterMode}
-        onChange={(e) => setFilterMode(e.target.value)}
-        aria-label="Job mode"
-      >
-        <option value="">Job Type</option>
-        <option value="wfh">WFH</option>
-        <option value="onsite">Onsite</option>
-        <option value="full">Full-time</option>
-        <option value="part">Part-time</option>
-      </select>
+            <select
+              value={filterMode}
+              onChange={(e) => setFilterMode(e.target.value)}
+              aria-label="Job mode"
+            >
+              <option value="">Job Type</option>
+              <option value="wfh">WFH</option>
+              <option value="onsite">Onsite</option>
+              <option value="full">Full-time</option>
+              <option value="part">Part-time</option>
+            </select>
 
-      {/* 🔥 CHANGED: added type="submit" and removed onClick */}
-      <button
-        type="submit"
-        className="btn btn-primary"
-        disabled={
-          !roleQuery.trim() &&
-          !cityQuery.trim() &&
-          !filterMode
-        }
-        title={
-          !roleQuery.trim() &&
-          !cityQuery.trim() &&
-          !filterMode
-            ? 'Enter role/city or choose a mode'
-            : undefined
-        }
-      >
-        Search
-      </button>
-    </form>
-  </div>
-</section>
+            {/* 🔥 CHANGED: added type="submit" and removed onClick */}
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={
+                !roleQuery.trim() &&
+                !cityQuery.trim() &&
+                !filterMode
+              }
+              title={
+                !roleQuery.trim() &&
+                  !cityQuery.trim() &&
+                  !filterMode
+                  ? 'Enter role/city or choose a mode'
+                  : undefined
+              }
+            >
+              Search
+            </button>
+          </form>
+        </div>
+      </section>
 
       <section id="jobs" className="categories">
         <div className="container">
@@ -287,27 +342,34 @@ function Home() {
             {[
               {
                 name: 'Shiwangi Singla',
+                rating: 5,
                 text:
                   'Thanks LmIndia for helping me find a job without much hassle. If you are a fresher or a skilled person with expert knowledge in a specific field, you can easily find a job through the LmIndia.',
               },
               {
                 name: 'Jenil Ghevariya',
+                rating: 4,
                 text:
                   'This app is very helpful if you are looking for a job and the team is also very supportive and friendly. They guided me through every stage. It is very easy to find a job on LmIndia because there are a lot of job options here for everyone. I got a job interview call very quickly after applying.',
               },
               {
                 name: 'Kaynat Mansuri',
+                rating: 4.5,
                 text:
                   'It is definitely a great app with correct and true information on the job details. I am happy to use it and I would also recommend my friends to use it for their career development.',
               },
               {
                 name: 'Rekha',
+                rating: 4.5,
                 text:
                   'Good and helpful app, even for freshers who don\'t have good qualifications. There are jobs for Caretakers, Househelp and many more. It\'s very easy to find jobs here. Thank you, LmIndia!',
               },
             ].map((t) => (
               <div key={t.name} className="t-card">
-                <div className="t-stars">★★★★☆ 4.5</div>
+                <div className="t-stars">
+                  <StarRating rating={t.rating} />
+                  <span>{t.rating}</span>
+                </div>
                 <p className="t-text">{t.text}</p>
                 <div className="t-name">{t.name}</div>
               </div>
@@ -357,17 +419,6 @@ function Home() {
         </div>
       </section>
 
-      <section id="employers" className="cta">
-        <div className="container cta-content">
-          <div>
-            <h2>Hire candidates faster</h2>
-            <p className="sub">Reach millions of job seekers across India.</p>
-          </div>
-          <Link to="/post-job" className="btn btn-primary">
-            Post a Job
-          </Link>
-        </div>
-      </section>
     </>
   );
 }
@@ -479,7 +530,7 @@ function App() {
         <Route path="/advice" element={<AdvicePage />} />
         <Route path="/advice/:slug" element={<AdviceDetailPage />} />
         <Route path="/about" element={<AboutPage />} />
-         <Route path="/post-job" element={<PostJob />} />
+        <Route path="/terms" element={<TermsPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/register" element={<RegisterPage />} />

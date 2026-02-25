@@ -579,6 +579,9 @@
   background-repeat: no-repeat;
   background-position: right 12px center;
   background-size: 14px;
+
+   -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
 .theme-dark .searchbar select {
@@ -968,6 +971,14 @@
   color: #f59e0b;
   font-weight: 700;
   margin-bottom: 8px;
+
+   display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.t-stars span {
+  font-weight: 600;
 }
 
 .t-text {
