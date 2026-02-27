@@ -36,7 +36,7 @@ export default function AdvicePage() {
   ];
 
   return (
-    <div className="app-root">
+    // <div className="app-root">
       <section className="advice">
         <div className="container">
           <h1>Career Advice</h1>
@@ -57,6 +57,6 @@ export default function AdvicePage() {
           </div>
         </div>
       </section>
-    </div>
+    // </div>
   );
 }

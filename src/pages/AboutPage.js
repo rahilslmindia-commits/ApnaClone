@@ -3,7 +3,7 @@ import '../App.css';
 
 export default function AboutPage() {
   return (
-    <div className="app-root">
+    // <div className="app-root">
       <section className="article">
         <div className="container article-content">
           <h1 className="article-title">About LmIndia Placements</h1>
@@ -40,6 +40,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-    </div>
+    // </div>
   );
 }

@@ -47,7 +47,7 @@ export default function JobDetailPage() {
   }
 
   return (
-    <div className="app-root">
+    <div className="app-root job-detail-page">
       <section className="job-detail">
         <div className="container job-detail-content">
           <div>

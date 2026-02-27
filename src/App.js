@@ -7,7 +7,9 @@ import SearchPage from './pages/SearchPage';
 import AdvicePage from './pages/AdvicePage';
 import AdviceDetailPage from './pages/AdviceDetailPage';
 import AboutPage from './pages/AboutPage';
+import ContactPage from './pages/ContactPage';
 import TermsPage from './pages/TermsPage';
+import LandingPage from './pages/LandingPage';
 import { adviceArticles } from './data/advice';
 import LoginPage from './pages/LoginPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
@@ -522,19 +524,23 @@ function App() {
         </div>
       </header>
 
+      <main className="main-content">
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/jobs/:category" element={<JobsPage />} />
         <Route path="/jobs/:category/:id" element={<JobDetailPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/advice" element={<AdvicePage />} />
         <Route path="/advice/:slug" element={<AdviceDetailPage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="/terms" element={<TermsPage />} />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>
+      </main>
 
       <footer className="footer">
         <div className="container footer-content">
@@ -558,10 +564,11 @@ function App() {
             <div className="footer-title">Resources</div>
             <div className="footer-links">
               <Link to="/advice">Career Advice</Link>
-              <a href="#contact">Contact</a>
+              <Link to="/contact">Contact</Link>
               <Link to="/about">About</Link>
               <a href="#privacy">Privacy</a>
-              <a href="/terms">Terms</a>
+              <Link to="/terms">Terms</Link>
+              <Link to="/home">Home</Link>
             </div>
           </div>
         </div>
